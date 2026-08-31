@@ -51,6 +51,7 @@ void printHelp() {
 		"  tick id                  Complete/toggle a task\n"
 		"  edit id 'new title'      Edit a task title\n"
 		"  del id                   Delete a task\n"
+		"  help                     Show this again\n"
 		"  kaboom                   Uninitaialize tasks\n"
 	);
 }

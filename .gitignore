@@ -8,6 +8,7 @@ tsk
 # Build directories
 build/
 bin/
+.cache/
 compile_commands.json
 
 #saves

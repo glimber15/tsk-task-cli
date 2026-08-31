@@ -103,7 +103,7 @@ void displayTasks(sqlite3 *db, int state, const char *title) {
 		char symbol = state ? '#' : ' ';
 
 		// TODO: only show desc if it has description
-		printf("%3d [%c]\n%s\n", id, symbol, title);
+		printf("%3d [%c] %s\n", id, symbol, title);
 		if (desc)
 			printf(" - %s\n\n", desc);
 
