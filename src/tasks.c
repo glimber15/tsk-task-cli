@@ -85,12 +85,6 @@ void displayTasks(sqlite3 *db, int state, const char *title) {
 
 	int rc = sqlite3_step(stmt);
 
-	if (rc == SQLITE_DONE) {
-		printf("There are no tasks!\n");
-		sqlite3_finalize(stmt);
-		return;
-	}
-
 	// prints the category title
 	printf("\n%s\n", title);
 
@@ -102,8 +96,7 @@ void displayTasks(sqlite3 *db, int state, const char *title) {
 
 		char symbol = state ? '#' : ' ';
 
-		// TODO: only show desc if it has description
-		printf("%3d [%c] %s\n", id, symbol, title);
+		printf("%4d [%c] %s\n", id, symbol, title);
 		if (desc)
 			printf(" - %s\n\n", desc);
 

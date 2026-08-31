@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Open db
-	sqlite3 *task_db = NULL;
+	sqlite3 *db = NULL;
 	char root[PATH_MAX];
 	char db_path[PATH_MAX];
 
@@ -38,10 +38,10 @@ int main(int argc, char **argv) {
 
 	snprintf(db_path, sizeof(db_path), "%s/.tsk/tasks.db", root);
 
-	if (!createOpenDb(&task_db, db_path))
+	if (!createOpenDb(&db, db_path))
 		return 1;
 
-	if (!createTasksTable(task_db))
+	if (!createTasksTable(db))
 		return 1;
 
 	//
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 			printHelp();
 			return 1;
 		}
-		addTask(task_db, argv[2]);
+		addTask(db, argv[2]);
 		return 0;
 	}
 	//
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 		}
 		float id;
 		if (parseToNum(argv[2], &id)) {
-			addTaskDesc(task_db, argv[3], id);
+			addTaskDesc(db, argv[3], id);
 			return 0;
 		}
 		printHelp();
@@ -74,10 +74,16 @@ int main(int argc, char **argv) {
 	// Show tasks
 	//
 	else if (strcmp(argv[1], "show") == 0) {
-		displayTasks(task_db, 0, "Tasks");
+		if (getTaskCount(db, 0) <= 0)
+			printf("There are no pending tasks!\n");
+		else
+			displayTasks(db, 0, "Tasks");
 		if (argc > 2 || argc < 2) {
 			if (strcmp(argv[2], "-c") == 0)
-				displayTasks(task_db, 1, "Completed");
+				if (getTaskCount(db, 1) <= 0)
+					printf("There are no completed tasks!\n");
+				else
+					displayTasks(db, 1, "Completed");
 			else if (strcmp(argv[2], "-d") == 0)
 				// TODO: dont show descriptions
 				return 1;
@@ -97,7 +103,7 @@ int main(int argc, char **argv) {
 
 		float id;
 		if (parseToNum(argv[2], &id)) {
-			toggleTask(task_db, id);
+			toggleTask(db, id);
 			return 0;
 		}
 		printHelp();
@@ -105,6 +111,7 @@ int main(int argc, char **argv) {
 	//
 	// Delete task
 	//
+	// TODO: Clear all completed tasks shorthand (-c)?
 	else if (strcmp(argv[1], "del") == 0) {
 		if (argc < 3 || argc > 3) {
 			printHelp();
@@ -113,7 +120,7 @@ int main(int argc, char **argv) {
 
 		float id;
 		if (parseToNum(argv[2], &id)) {
-			deleteTask(task_db, id);
+			deleteTask(db, id);
 			return 0;
 		}
 		printHelp();
@@ -129,7 +136,7 @@ int main(int argc, char **argv) {
 
 		float id;
 		if (parseToNum(argv[2], &id)) {
-			editTask(task_db, id, argv[3]);
+			editTask(db, id, argv[3]);
 			return 0;
 		}
 		printHelp();
@@ -139,7 +146,7 @@ int main(int argc, char **argv) {
 	//
 	else if (strcmp(argv[1], "kaboom") == 0) {
 		if (confirm("Clear all Data: ")) {
-			clearData(task_db);
+			clearData(db);
 			return 0;
 		}
 
@@ -155,7 +162,7 @@ int main(int argc, char **argv) {
 	else
 	printHelp();
 
-	sqlite3_close(task_db);
+	sqlite3_close(db);
 
 	return 0;
 }

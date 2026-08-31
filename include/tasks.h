@@ -33,5 +33,6 @@ bool parseToNum(const char *str, float *result);
 bool confirm(const char *dialog);
 void printHelp();
 bool findProjectDir(char *root, size_t size);
+int getTaskCount(sqlite3 *db, int state);
 
 #endif

@@ -1,3 +1,4 @@
+#include <sqlite3.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +38,27 @@ bool findProjectDir(char *root, size_t size) {
 		}
 		*slash = '\0';
 	}
+}
+
+int getTaskCount(sqlite3 *db, int state) {
+	const char *sql = "SELECT COUNT(*) FROM tasks WHERE state = ?;";
+
+	sqlite3_stmt *stmt;
+	int count = 0;
+
+	if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+		fprintf(stderr, "Failed to prepare count query: %s\n", sqlite3_errmsg(db));
+		return -1;
+	}
+
+	sqlite3_bind_int(stmt, 1, state);
+
+	if (sqlite3_step(stmt) == SQLITE_ROW)
+		count = sqlite3_column_int(stmt, 0);
+
+	sqlite3_finalize(stmt);
+
+	return count;
 }
 
 void printHelp() {
