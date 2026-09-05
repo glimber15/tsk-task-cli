@@ -1,17 +1,27 @@
 # Todo CLI
-> A todo app which lives im your project. It's kinda like your TODO.md but more cli-y and only show you whats is important.
+A todo app which lives im your project. It's kinda like your TODO.md but more cli-y and only show you whats is important.
 
 ## Usage
-`"usage                      tsk <action> <params...>\n\n"
-"actions:\n"
-"  init                     Initialize tasks in project dir\n"
-"  add 'task title'         Add a task\n"
-"  desc id 'description'    Add description to a task\n"
-"  show                     Show tasks pending\n"
-"  show -c                  Show completed tasks also\n"
-"  tick id                  Complete/toggle a task\n"
-"  edit id 'new title'      Edit a task title\n"
-"  del id                   Delete a task\n"
-"  kaboom                   Uninitaialize tasks\n"`
+| Command | What it does |
+|---------|--------------|
+| `tsk init` | Initialize tsk in project |
+| `tsk add 'task title'` | Add a task |
+| `tsk desc id 'description'` | Add description to a task |
+| `tsk show` | Show pending tasks |
+| `tsk show -c` | Show completed tasks also |
+| `tsk tick id` | Complete/Toggle a task |
+| `tsk edit id 'new title'` | Edit added task title |
+| `tsk del id` | Delete a task |
+| `tsk kaboom` | Uninitialize tsk/ remove .tsk/ |
 
-> Also using `tsk show >> todo.txt` can give you a task file
+> `tsk show >> todo.txt` can gives you a task file
+
+## Installation
+* Copy the repository
+* Make `install.sh` executable using `chmod +x install.sh`
+* `./install.sh`
+* tsk is now usable in your projects
+
+### Uninstall
+* make `uninstall.sh` executable
+* `./uninstall.sh`
