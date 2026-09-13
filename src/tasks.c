@@ -65,7 +65,7 @@ void addTaskDesc(sqlite3 *db, const char *desc, int id) {
 	sqlite3_finalize(stmt);
 }
 
-void displayTasks(sqlite3 *db, int state, const char *title) {
+void displayTasks(sqlite3 *db, int state, const char *category) {
 	const char *sql =
 		"SELECT * FROM tasks "
 		"WHERE state = ? "
@@ -86,19 +86,22 @@ void displayTasks(sqlite3 *db, int state, const char *title) {
 	int rc = sqlite3_step(stmt);
 
 	// prints the category title
-	printf("\n%s\n", title);
+	printf("\n%s\n", category);
 
 	while (rc == SQLITE_ROW) {
 		int id = sqlite3_column_int(stmt, 0);
 		const char *title = (char *)sqlite3_column_text(stmt, 1);
-		int state = sqlite3_column_int(stmt, 2);
-		const char *desc = (char *)sqlite3_column_text(stmt, 3);
+		const char *desc = (char *)sqlite3_column_text(stmt, 2);
+		int state = sqlite3_column_int(stmt, 3);
+        const char *date = (char *)sqlite3_column_text(stmt, 4);
 
 		char symbol = state ? '#' : ' ';
 
 		printf("%4d [%c] %s\n", id, symbol, title);
 		if (desc)
-			printf(" - %s\n\n", desc);
+			printf(" - %s\n", desc);
+        if (date)
+            printf("%s\n\n", date);
 
 		rc = sqlite3_step(stmt);
 	}
