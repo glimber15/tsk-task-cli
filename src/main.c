@@ -74,22 +74,39 @@ int main(int argc, char **argv) {
 	// Show tasks
 	//
 	else if (strcmp(argv[1], "show") == 0) {
-		if (getTaskCount(db, 0) <= 0)
-			printf("There are no pending tasks!\n");
-		else
-			displayTasks(db, 0, "Tasks");
-		if (argc > 2 || argc < 2) {
-			if (strcmp(argv[2], "-c") == 0)
-				if (getTaskCount(db, 1) <= 0)
-					printf("There are no completed tasks!\n");
-				else
-					displayTasks(db, 1, "Completed");
-			else if (strcmp(argv[2], "-d") == 0)
-				// TODO: dont show descriptions
-				return 1;
-			else
-				printHelp();
-		}
+        int state = 0;
+        int mode = 1;
+
+        if (argc > 2) {
+            if (strcmp(argv[2], "-c") == 0)
+                state = 1;
+            else if (strcmp(argv[2], "-d") == 0)
+                mode = 0;
+            else if (strcmp(argv[2], "-cd") == 0) {
+                state = 1;
+                mode = 0;
+            }
+            else {
+                printHelp();
+                return 1;
+            }
+        }
+
+        if (getTaskCount(db, state) <= 0) {
+            if (state == 0)
+                printf("No pending tasks!\n");
+            else
+                printf("No completed tasks!\n");
+        }
+        else {
+            if (state == 0)
+                printf("Tasks\n");
+            else
+                printf("Completed\n");
+
+            displayTasks(db, state, mode);
+        }
+
 		return 0;
 	}
 	//
