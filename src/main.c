@@ -100,14 +100,14 @@ int main(int argc, char **argv) {
 		}
 		else {
 			if (state == 0) {
-				printf("Tasks\n");
+				printf("\033[7mTasks\033[0m\n");
 				displayTasks(db, state, mode);
 			}
 			else {
-				printf("Completed\n");
+				printf("\033[7mCompleted\033[0m\n");
 				displayTasks(db, state, mode);
 				state = 0;
-				printf("Tasks\n");
+				printf("\033[7mTasks\033[0m\n");
 				displayTasks(db, state, mode);
 			}
 		}

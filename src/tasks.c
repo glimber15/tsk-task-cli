@@ -96,14 +96,14 @@ void displayTasks(sqlite3 *db, int state, int minimal) {
 
 		char symbol = state ? '#' : ' ';
 
-		printf("%4d [%c] %s\n\t\033[90m(pry: %d)\033[0m\n", 
+		printf("%4d [%c] \033[1;37m%s\033[0m\n\t\033[90m(pry: %d)\033[0m\n", 
 			id, symbol, title, priority);
 
 		if (!minimal) {
 			if (desc)
 				printf(" - %s\n", desc);
 			if (date)
-				printf("%s\n\n", date);
+				printf("\033[90m%s\033[0m\n\n", date);
 		}
 
 		rc = sqlite3_step(stmt);
