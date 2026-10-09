@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+
 void addTask(sqlite3 *db, const char *title) {
 	const char *sql = "INSERT INTO tasks (title) VALUES (?);";
 	sqlite3_stmt *stmt;
@@ -90,18 +91,20 @@ void displayTasks(sqlite3 *db, int state, int minimal) {
 		const char *title = (char *)sqlite3_column_text(stmt, 1);
 		const char *desc = (char *)sqlite3_column_text(stmt, 2);
 		int state = sqlite3_column_int(stmt, 3);
-        const char *date = (char *)sqlite3_column_text(stmt, 4);
+		const char *date = (char *)sqlite3_column_text(stmt, 4);
+		int priority = sqlite3_column_int(stmt, 5);
 
 		char symbol = state ? '#' : ' ';
 
-		printf("%4d [%c] %s\n", id, symbol, title);
+		printf("%4d [%c] %s\n\t\033[90m(pry: %d)\033[0m\n", 
+			id, symbol, title, priority);
 
-        if (!minimal) {
-            if (desc)
-                printf(" - %s\n", desc);
-            if (date)
-                printf("%s\n\n", date);
-        }
+		if (!minimal) {
+			if (desc)
+				printf(" - %s\n", desc);
+			if (date)
+				printf("%s\n\n", date);
+		}
 
 		rc = sqlite3_step(stmt);
 	}
@@ -227,7 +230,6 @@ void deleteTask(sqlite3 *db, int id) {
 	sqlite3_finalize(stmt);
 }
 
-// TODO: display previous task and new task in response
 void editTask(sqlite3 *db, int id, const char *new_title) {
 	const char *sql =
 		"UPDATE tasks "
@@ -263,7 +265,6 @@ void editTask(sqlite3 *db, int id, const char *new_title) {
 	sqlite3_finalize(stmt);
 }
 
-// TODO: uninitialize tsk (delete .tsk)
 void clearData(sqlite3 *db) {
 	const char *sql = "DELETE FROM tasks;";
 	char *err_msg = NULL;

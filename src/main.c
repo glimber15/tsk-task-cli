@@ -74,38 +74,43 @@ int main(int argc, char **argv) {
 	// Show tasks
 	//
 	else if (strcmp(argv[1], "show") == 0) {
-        int state = 0; // Completed or not
-        int mode = 1; // Detailed or not
+		int state = 0; // Completed or not
+		int mode = 1; // Detailed or not
 
-        if (argc > 2) {
-            if (strcmp(argv[2], "-c") == 0)
-                state = 1;
-            else if (strcmp(argv[2], "-d") == 0)
-                mode = 0;
-            else if (strcmp(argv[2], "-cd") == 0) {
-                state = 1;
-                mode = 0;
-            }
-            else {
-                printHelp();
-                return 1;
-            }
-        }
+		if (argc > 2) {
+			if (strcmp(argv[2], "-c") == 0)
+				state = 1;
+			else if (strcmp(argv[2], "-d") == 0)
+				mode = 0;
+			else if (strcmp(argv[2], "-cd") == 0) {
+				state = 1;
+				mode = 0;
+			}
+			else {
+				printHelp();
+				return 1;
+			}
+		}
 
-        if (getTaskCount(db, state) <= 0) {
-            if (state == 0)
-                printf("No pending tasks!\n");
-            else
-                printf("No completed tasks!\n");
-        }
-        else {
-            if (state == 0)
-                printf("Tasks\n");
-            else
-                printf("Completed\n");
-
-            displayTasks(db, state, mode);
-        }
+		if (getTaskCount(db, state) <= 0) {
+			if (state == 0)
+				printf("No pending tasks!\n");
+			else
+				printf("No completed tasks!\n");
+		}
+		else {
+			if (state == 0) {
+				printf("Tasks\n");
+				displayTasks(db, state, mode);
+			}
+			else {
+				printf("Completed\n");
+				displayTasks(db, state, mode);
+				state = 0;
+				printf("Tasks\n");
+				displayTasks(db, state, mode);
+			}
+		}
 
 		return 0;
 	}
@@ -145,7 +150,6 @@ int main(int argc, char **argv) {
 	//
 	// Delete task
 	//
-	// TODO: Clear all completed tasks shorthand (-c)?
 	else if (strcmp(argv[1], "del") == 0) {
 		if (argc != 3) {
 			printHelp();
