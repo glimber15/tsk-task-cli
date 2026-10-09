@@ -149,6 +149,48 @@ void toggleTask(sqlite3 *db, int id) {
 	sqlite3_finalize(stmt);
 }
 
+void setPriority(sqlite3 *db, int id, int priority) {
+	const char *sql = 
+		"UPDATE tasks SET "
+		"priority = ? "
+		"WHERE id = ?";
+	sqlite3_stmt *stmt;
+
+	if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+		fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+		return;
+	}
+
+	if (sqlite3_bind_int(stmt, 1, priority) != SQLITE_OK) {
+		fprintf(stderr, "Failed to bind task id\n");
+		sqlite3_finalize(stmt);
+		return;
+	}
+
+	if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
+		fprintf(stderr, "Failed to bind task id\n");
+		sqlite3_finalize(stmt);
+		return;
+	}
+
+	int rc = sqlite3_step(stmt);
+
+	if (rc != SQLITE_DONE) {
+		fprintf(stderr, "Failed to update task description: %s\n", sqlite3_errmsg(db));
+		sqlite3_finalize(stmt);
+	}
+
+	printf("Priority set: [%d] %d\n", id, priority);
+
+	if (rc == SQLITE_DONE)
+		fprintf(stderr, "Task [%d] does not exist\n", id);
+	else {
+		fprintf(stderr, "Failed to delete task: %s\n", sqlite3_errmsg(db));
+	}
+
+	sqlite3_finalize(stmt);
+}
+
 void deleteTask(sqlite3 *db, int id) {
 	const char *sql =
 		"DELETE FROM tasks "

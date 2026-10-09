@@ -9,6 +9,7 @@ A todo app which lives im your project. It's kinda like your TODO.md but more cl
 | `tsk desc id 'description'` | Add description to a task |
 | `tsk show` | Show pending tasks |
 | `tsk show -c` | Show completed tasks also |
+| `tsk show -d` | Show tasks with extra details |
 | `tsk tick id` | Complete/Toggle a task |
 | `tsk edit id 'new title'` | Edit added task title |
 | `tsk del id` | Delete a task |

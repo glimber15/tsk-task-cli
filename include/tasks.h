@@ -24,6 +24,8 @@ void addTask(sqlite3 *db, const char *title);
 void addTaskDesc(sqlite3 *db, const char *desc, int id);
 void displayTasks(sqlite3 *db, int state, int minimal);
 void toggleTask(sqlite3 *db, int id);
+void setPriority(sqlite3 *db, int id, int priority);
+void clearPriority(sqlite3 *db, int id);
 void deleteTask(sqlite3 *db, int id);
 void editTask(sqlite3 *db, int id, const char *new_title);
 void clearData(sqlite3 *db);

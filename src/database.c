@@ -23,7 +23,8 @@ bool createTasksTable(sqlite3 *db) {
 		"title TEXT NOT NULL,"
 		"description TEXT,"
 		"state INTEGER NOT NULL DEFAULT 0,"
-        "date TEXT DEFAULT CURRENT_TIMESTAMP"
+        "date TEXT DEFAULT CURRENT_TIMESTAMP,"
+        "priority INTEGER DEFAULT 0"
 		");";
 
 	char *err_msg = NULL;

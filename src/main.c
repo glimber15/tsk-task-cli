@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 	// Initialize/create tasks .tsk dir
 	//
 	if (strcmp(argv[1], "init") == 0) {
-		if (argc < 2 || argc > 2) {
+		if (argc != 2) {
 			printHelp();
 			return 1;
 		}
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 	// Add Task
 	//
 	if (strcmp(argv[1], "add") == 0) {
-		if (argc < 3 || argc > 3) {
+		if (argc != 3) {
 			printHelp();
 			return 1;
 		}
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 	// Add description
 	//
 	else if (strcmp(argv[1], "desc") == 0) {
-		if (argc < 4 || argc > 4) {
+		if (argc != 4) {
 			printHelp();
 			return 1;
 		}
@@ -74,8 +74,8 @@ int main(int argc, char **argv) {
 	// Show tasks
 	//
 	else if (strcmp(argv[1], "show") == 0) {
-        int state = 0;
-        int mode = 1;
+        int state = 0; // Completed or not
+        int mode = 1; // Detailed or not
 
         if (argc > 2) {
             if (strcmp(argv[2], "-c") == 0)
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
 	// Toggle task
 	//
 	else if (strcmp(argv[1], "tick") == 0) {
-		if (argc < 3 || argc > 3) {
+		if (argc != 3) {
 			printHelp();
 			return 1;
 		}
@@ -125,12 +125,29 @@ int main(int argc, char **argv) {
 		}
 		printHelp();
 	}
+	// 
+	// Priority Setup
+	//
+	else if (strcmp(argv[1], "pry") == 0) {
+		if (argc != 4) {
+			printHelp();
+			return 1;
+		}
+
+		float id;
+		float priority;
+		if (parseToNum(argv[2], &id) && parseToNum(argv[3], &priority)) {
+			setPriority(db, id, priority);
+			return 0;
+		}
+		printHelp();
+	}
 	//
 	// Delete task
 	//
 	// TODO: Clear all completed tasks shorthand (-c)?
 	else if (strcmp(argv[1], "del") == 0) {
-		if (argc < 3 || argc > 3) {
+		if (argc != 3) {
 			printHelp();
 			return 1;
 		}
@@ -146,7 +163,7 @@ int main(int argc, char **argv) {
 	// Edit task
 	//
 	else if (strcmp(argv[1], "edit") == 0) {
-		if (argc < 4 || argc > 4) {
+		if (argc != 4) {
 			printHelp();
 			return 1;
 		}
@@ -162,6 +179,10 @@ int main(int argc, char **argv) {
 	// Clear all task data
 	//
 	else if (strcmp(argv[1], "kaboom") == 0) {
+		if (argc != 2) {
+			printHelp();
+			return 1;
+		}
 		if (confirm("Clear all Data: ")) {
 			clearData(db);
 			return 0;
@@ -171,7 +192,11 @@ int main(int argc, char **argv) {
 	//
 	// Print help
 	//
-	else if (strcmp(argv[1], "help") == 0) {
+	else if (strcmp(argv[1], "help") == 0 || strcmp(argv[1], "h") == 0) {
+		if (argc != 2) {
+			printHelp();
+			return 1;
+		}
 		printHelp();
 		return 0;
 	}
